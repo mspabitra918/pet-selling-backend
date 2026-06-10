@@ -1,11 +1,12 @@
 import { NestFactory } from "@nestjs/core";
 import type { IncomingMessage, ServerResponse } from "http";
-import { AppModule } from "src/app.module";
-import { setupApp } from "src/setup";
 
-// Import from the compiled output (produced by `nest build`) so that the
-// TypeScript decorator metadata required by NestJS dependency injection is
-// preserved. The Vercel build runs `npm run build` first (see vercel.json).
+// Import from the compiled output (produced by `nest build`) so the TypeScript
+// decorator metadata required by NestJS dependency injection is preserved.
+// The Vercel build runs `npm run build` first (see vercel.json), and the
+// relative path lets Vercel's file tracer bundle dist/ into the function.
+import { AppModule } from "../dist/app.module";
+import { setupApp } from "../dist/setup";
 
 // Cache the express instance across warm invocations.
 let cachedHandler:
