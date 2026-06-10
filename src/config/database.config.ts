@@ -21,4 +21,9 @@ export const buildSequelizeOptions = (
   autoLoadModels: true,
   synchronize: false,
   logging: config.get<string>('DB_LOGGING') === 'true' ? console.log : false,
+  // Cloud Postgres providers (Supabase, Neon, RDS, …) require SSL. Enable it
+  // with DB_SSL=true. `rejectUnauthorized: false` accepts their managed certs.
+  ...(config.get<string>('DB_SSL') === 'true'
+    ? { dialectOptions: { ssl: { require: true, rejectUnauthorized: false } } }
+    : {}),
 });
