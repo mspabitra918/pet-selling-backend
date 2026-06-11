@@ -41,39 +41,39 @@ export class EmailService {
   }
 
   private async send(payload: EmailPayload): Promise<void> {
-    // try {
-    //   await this.mailgun.messages.create(this.domain, {
-    //     from: this.config.get<string>(
-    //       "MAILGUN_FROM",
-    //       "TruCredit Capital <noreply@trucreditcapital.com>",
-    //     ),
-    //     to: payload.to,
-    //     subject: payload.subject,
-    //     html: payload.html,
-    //   });
-    //   this.logger.log(`Email sent to ${payload.to}: ${payload.subject}`);
-    // } catch (err) {
-    //   this.logger.error(`Failed to send email to ${payload.to}`, err as any);
-    // }
     try {
-      console.log("DOMAIN:", this.domain);
-
-      const key = this.config.get<string>("MAILGUN_API_KEY") ?? "";
-      console.log("KEY PREFIX:", key.substring(0, 10));
-
-      const result = await this.mailgun.messages.create(this.domain, {
-        from: `noreply@${this.domain}`,
-        to: "your-email@gmail.com",
-        subject: "Test",
-        text: "Hello",
+      await this.mailgun.messages.create(this.domain, {
+        from: this.config.get<string>(
+          "MAILGUN_FROM",
+          "TruCredit Capital <noreply@trucreditcapital.com>",
+        ),
+        to: payload.to,
+        subject: payload.subject,
+        html: payload.html,
       });
-
-      console.log("SUCCESS:", result);
-    } catch (error: any) {
-      console.log("STATUS:", error.status);
-      console.log("DETAILS:", error.details);
-      console.log("ERROR:", error);
+      this.logger.log(`Email sent to ${payload.to}: ${payload.subject}`);
+    } catch (err) {
+      this.logger.error(`Failed to send email to ${payload.to}`, err as any);
     }
+    // try {
+    //   console.log("DOMAIN:", this.domain);
+
+    //   const key = this.config.get<string>("MAILGUN_API_KEY") ?? "";
+    //   console.log("KEY PREFIX:", key.substring(0, 10));
+
+    //   const result = await this.mailgun.messages.create(this.domain, {
+    //     from: `noreply@${this.domain}`,
+    //     to: "your-email@gmail.com",
+    //     subject: "Test",
+    //     text: "Hello",
+    //   });
+
+    //   console.log("SUCCESS:", result);
+    // } catch (error: any) {
+    //   console.log("STATUS:", error.status);
+    //   console.log("DETAILS:", error.details);
+    //   console.log("ERROR:", error);
+    // }
   }
 
   async sendOrderStatusEmail(details: OrderStatusEmailDetails): Promise<void> {
